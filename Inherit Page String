@@ -1,0 +1,35 @@
+This is trick how to inherit page string in odoo 9.
+in odoo 8, you will use <xpath expr="/form/sheet/notebook/page[@string='Other Information']" position="after">
+in odoo 9, you will use <xpath expr="/form/sheet[1]/notebook[1]/page[2]" position="after"> 
+
+example :
+
+in py:
+
+class SaleOrderWay(models.Model):
+    _inherit = "sale.order"
+    _description = "This way to inherit page string"
+
+    char = fields.Char(string="Input your name :", required=False, )
+
+in xml:
+
+<!-- Inherit Form View to Modify it -->
+<record id="inherit_sale_order" model="ir.ui.view">
+    <field name="name">sale.order.inherit</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+        <!-- This is path of page you want to inherit -->
+        <xpath expr="/form/sheet[1]/notebook[1]/page[2] " position="after">
+            <!-- This is your page inherit -->
+            <page string="Page Inherit">
+                <!-- Add your fields or attributes here -->
+                <field name="char"/>
+            </page>
+        </xpath>
+
+    </field>
+</record>
+
+source link : http://stackoverflow.com/questions/36424276/xpath-selection-not-working-in-odoo-9
